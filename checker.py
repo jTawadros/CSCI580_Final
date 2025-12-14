@@ -37,7 +37,7 @@ for middle_alg in [{"name":"ReLU", "what":nn.ReLU()}, {"name":"LeakyReLU", "what
 				lB += NEURON_MULT
 				lA = NEURON_BASE
 
-# scatter plot (x:class_correct, y:mnist_correct)
+# scatter plot with top 5 labeled
 scores = []
 for i in range(len(name_array)):
 	scores.append((i, class_correct_array[i], mnist_correct_array[i]))
