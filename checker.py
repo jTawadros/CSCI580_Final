@@ -37,21 +37,23 @@ for middle_alg in [{"name":"ReLU", "what":nn.ReLU()}, {"name":"LeakyReLU", "what
 				lB += NEURON_MULT
 				lA = NEURON_BASE
 
-results = []
+# scatter plot (x:class_correct, y:mnist_correct)
+scores = []
 for i in range(len(name_array)):
-	results.append((name_array[i], class_correct_array[i]))
-	results.sort(key=lambda x: x[1], reverse=True)
-	top5 = results[:5]
-	names = [top5[i][0] for i in range(len(top5))]
-	scores = [top5[i][1] for i in range(len(top5))]
-	plt.figure(figsize=(10,5))
-	plt.bar(names, scores)
-	plt.ylabel('Class Proportion Correct')
-	plt.xlabel('Model Configuration')
-	plt.ylim(0, 1)
-	plt.xticks(rotation=45, ha='right')
-	plt.savefig('top5_models.png', bbox_inches='tight')
-	plt.show()
-
-
+	scores.append((i, class_correct_array[i], mnist_correct_array[i]))
+scores = sorted(scores, key=lambda x: x[1], reverse=True)
+top5_indices = [i for i,_ in scores[:5]]
+plt.figure(figsize=(10, 6))
+plt.scatter(class_correct_array, mnist_correct_array, alpha=0.6)
+plt.xlabel('Class Accuracy')
+plt.ylabel('MNIST Accuracy')
+plt.title('Hyperparameter Tuning Results (top 5)')
+for i in top5_indices:
+	plt.scatter(class_correct_array[i], mnist_correct_array[i], color='red')
+	plt.text(class_correct_array[i], mnist_correct_array[i], name_array[i], fontsize=9)
+plt.xlim(0, 1)
+plt.ylim(0, 1)
+plt.tight_layout()
+plt.savefig('hyperparameter_tuning_results.png')
+plt.show()
 fp_benchmark.best(name_array, mnist_correct_array, class_correct_array)
