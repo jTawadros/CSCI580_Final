@@ -37,4 +37,21 @@ for middle_alg in [{"name":"ReLU", "what":nn.ReLU()}, {"name":"LeakyReLU", "what
 				lB += NEURON_MULT
 				lA = NEURON_BASE
 
+results = []
+for i in range(len(name_array)):
+	results.append((name_array[i], class_correct_array[i]))
+	results.sort(key=lambda x: x[1], reverse=True)
+	top5 = results[:5]
+	names = [top5[i][0] for i in range(len(top5))]
+	scores = [top5[i][1] for i in range(len(top5))]
+	plt.figure(figsize=(10,5))
+	plt.bar(names, scores)
+	plt.ylabel('Class Proportion Correct')
+	plt.xlabel('Model Configuration')
+	plt.ylim(0, 1)
+	plt.xticks(rotation=45, ha='right')
+	plt.savefig('top5_models.png', bbox_inches='tight')
+	plt.show()
+
+
 fp_benchmark.best(name_array, mnist_correct_array, class_correct_array)
